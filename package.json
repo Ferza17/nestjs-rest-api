@@ -21,11 +21,14 @@
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.2.1",
+    "express-request-context": "^1.0.1",
+    "joi": "^17.8.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
