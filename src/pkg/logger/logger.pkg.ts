@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
 @Injectable()
 export class LoggerPkg {
   private message: messageLogger;
@@ -12,7 +11,7 @@ export class LoggerPkg {
       [now.getHours(), now.getMinutes(), now.getSeconds()].join(':');
 
     this.message = new messageLogger();
-    this.message.finalMessage = `[Time: ${dateFormat}] requestID : ${requestID}`;
+    this.message.finalMessage = `Time: ${dateFormat} - RequestID : ${requestID}`;
     return this.message;
   }
 
@@ -24,7 +23,7 @@ export class LoggerPkg {
       [now.getHours(), now.getMinutes(), now.getSeconds()].join(':');
 
     this.message = new messageLogger();
-    this.message.finalMessage = `[Time: ${dateFormat}]`;
+    this.message.finalMessage = `Time: ${dateFormat}`;
     return this.message;
   }
 }
@@ -33,9 +32,9 @@ class messageLogger {
   public finalMessage: string;
 
   info(msg: string) {
-    console.info(this.finalMessage, msg);
+    console.info(`\x1b[32m[INFO]\t`, `\x1b[0m${this.finalMessage}`, msg);
   }
   error(msg: string) {
-    console.error(this.finalMessage, msg);
+    console.error(`\x1b[31m[ERROR]\t`, `\x1b[0m${this.finalMessage}`, msg);
   }
 }

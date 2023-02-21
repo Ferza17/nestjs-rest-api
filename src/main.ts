@@ -1,56 +1,57 @@
-import { NestApplication, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { LoadConfig } from './config/app.config';
 import expressContext from 'express-request-context';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { INestApplication } from '@nestjs/common';
 import { LoggerPkg } from './pkg/logger/logger.pkg';
 
 class Server {
-  private app: NestApplication;
-  private logger: LoggerPkg;
   constructor() {
-    this.bootstrap().then(() => {
-      this.logger = this.app.get(LoggerPkg);
+    // Start Rest Server
+    this.restServer();
 
-      // Start Rest Server
-      this.restServer()
-        .then(() => {
-          this.logger.WithoutField().info('starting RestServer');
-        })
-        .catch((err) => {
-          this.logger.WithoutField().error(`errRestServer err : ${err}`);
-        });
-
-      // Start Stream Server
-      this.streamServer()
-        .then(() => {
-          this.logger.WithoutField().info('starting StreamServer');
-        })
-        .catch((err) => {
-          this.logger.WithoutField().error(`errStreamServer err : ${err}`);
-        });
-    });
-  }
-
-  protected async bootstrap(): Promise<void> {
-    this.app = await NestFactory.create(AppModule);
+    // Start Stream Server
+    this.streamServer();
   }
 
   protected async restServer(): Promise<void> {
-    this.app.use(expressContext());
-    const swaggerConfig = new DocumentBuilder()
-      .setTitle('Task Management API')
-      .setDescription('The Task Management API Documentation')
-      .setVersion('1.0')
-      .addTag('Task Management')
-      .build();
-    const document = SwaggerModule.createDocument(this.app, swaggerConfig);
-    SwaggerModule.setup('/api/docs', this.app, document);
-    await this.app.listen(LoadConfig().port);
+    await NestFactory.create<INestApplication>(AppModule, {}).then((r) => {
+      r.use(expressContext());
+      const swaggerConfig = new DocumentBuilder()
+        .setTitle('Task Management API')
+        .setDescription('The Task Management API Documentation')
+        .setVersion('1.0')
+        .addTag('Task Management')
+        .build();
+      const document = SwaggerModule.createDocument(r, swaggerConfig);
+      SwaggerModule.setup('/api/docs', r, document);
+      r.listen(LoadConfig().port).then(() => {
+        const logger = r.get(LoggerPkg);
+        logger.WithoutField().info('Starting restServer');
+      });
+    });
   }
 
   protected async streamServer(): Promise<void> {
-    console.log('this method stands for kafka stream');
+    await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+      transport: Transport.KAFKA,
+      options: {
+        client: {
+          brokers: LoadConfig().brokers.split(',', 10),
+          clientId: 'nestjs-1',
+        },
+        consumer: {
+          groupId: LoadConfig().consumerGroupId,
+        },
+      },
+    }).then((r) => {
+      r.listen().then(() => {
+        const logger = r.get(LoggerPkg);
+        logger.WithoutField().info('Starting streamServer');
+      });
+    });
   }
 }
 

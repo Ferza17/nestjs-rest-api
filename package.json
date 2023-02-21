@@ -1,5 +1,5 @@
 {
-  "name": "taskmanagement",
+  "name": "user",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -23,10 +23,12 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/microservices": "^9.3.9",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.2.1",
     "express-request-context": "^1.0.1",
     "joi": "^17.8.3",
+    "kafkajs": "^2.2.3",
     "reflect-metadata": "^0.1.13",
     "uuid": "^9.0.0"
   },

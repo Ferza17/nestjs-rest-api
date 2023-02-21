@@ -1,7 +1,7 @@
 enum EnvironmentEnum {
-  Local = 'local',
-  Development = 'development',
-  Production = 'production',
+  LOCAL = 'local',
+  DEVELOPMENT = 'development',
+  PRODUCTION = 'production',
 }
 
 export default EnvironmentEnum;

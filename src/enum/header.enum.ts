@@ -1,5 +1,5 @@
-enum HTTPHeader {
-  XRequestID = 'X-REQUEST-ID',
+enum HTTPHeaderEnum {
+  X_REQUEST_ID = 'X-REQUEST-ID',
 }
 
-export default HTTPHeader;
+export default HTTPHeaderEnum;
