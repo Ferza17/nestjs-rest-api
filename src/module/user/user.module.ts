@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './controller/user.controller';
+import { UserRestController } from './controller/userRest.controller';
 import { UserService } from './service/user.service';
-import { UserRepository } from './repository/user.repository';
+import { UserMongodbRepository } from './repository/user.mongodb.repository';
 import { PkgModule } from '../../pkg/pkg.module';
+import { UserConsumerController } from './controller/userConsumer.controller';
+import { UtilsModule } from '../../utils/utils.module';
 
 @Module({
-  imports: [PkgModule],
-  controllers: [UserController],
-  providers: [UserService, UserRepository],
-  exports: [UserService],
+  imports: [PkgModule, UtilsModule],
+  controllers: [UserRestController, UserConsumerController],
+  providers: [UserService, UserMongodbRepository],
 })
 export class UserModule {}
