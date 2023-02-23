@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { UuidUtil } from '../../utils/uuid/uuid.util';
+import { UuidUtil } from '../../utils/uuid.util';
 import { Request, Response } from 'express';
 import HTTPHeaderEnum from '../../enum/header.enum';
 
@@ -10,7 +10,7 @@ export class XRequestIDMiddleware implements NestMiddleware {
   }
   use(req: Request, res: Response, next: () => void) {
     // Set Request Header to Request Context
-    req.context.requestID = req.get(HTTPHeaderEnum.X_REQUEST_ID)
+    req.context.RequestID = req.get(HTTPHeaderEnum.X_REQUEST_ID)
       ? ''
       : this.uuid.GenerateUUID();
     next();

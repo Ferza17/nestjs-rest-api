@@ -4,7 +4,11 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { LoadConfig } from './config/app.config';
 import expressContext from 'express-request-context';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { INestApplication, INestMicroservice } from '@nestjs/common';
+import {
+  INestApplication,
+  INestMicroservice,
+  ValidationPipe,
+} from '@nestjs/common';
 import { LoggerPkg } from './pkg/logger/logger.pkg';
 
 class Server {
@@ -20,6 +24,7 @@ class Server {
     try {
       server = await NestFactory.create<INestApplication>(AppModule, {});
       server.use(expressContext());
+      server.useGlobalPipes(new ValidationPipe());
       const swaggerConfig = new DocumentBuilder()
         .setTitle('Task Management API')
         .setDescription('The Task Management API Documentation')
@@ -53,6 +58,7 @@ class Server {
           },
         },
       );
+      server.useGlobalPipes(new ValidationPipe());
       await server.listen();
       server.get(LoggerPkg).WithoutField().info('Starting streamServer');
     } catch (e) {

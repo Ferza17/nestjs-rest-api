@@ -8,7 +8,7 @@ export class LoggerMiddleware implements NestMiddleware {
   }
   use(req: Request, res: Response, next: () => void) {
     // Gets the request log
-    this.logger.WithField(req.context.requestID).info(`LoggerMiddleware`);
+    this.logger.WithField(req.context.RequestID).info(`LoggerMiddleware`);
     // Ends middleware function execution, hence allowing to move on
     if (next) {
       next();

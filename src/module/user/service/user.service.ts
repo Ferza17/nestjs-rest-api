@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { LoggerPkg } from '../../../pkg/logger/logger.pkg';
-import { EncryptionUtil } from '../../../utils/encryption/encryption.util';
+import { EncryptionUtil } from '../../../utils/encryption.util';
 import { UserMongodbRepository } from '../repository/user.mongodb.repository';
 import { CreateUserDto } from '../dto/createUser.dto';
-import errorsEnum from '../../../enum/errors.enum';
+import GeneralException from '../../../exception/general.exception';
 
 @Injectable()
 export class UserService {
@@ -17,13 +17,12 @@ export class UserService {
     this.userRepository = userRepository;
   }
 
-  async CreateUser(reqData: CreateUserDto): Promise<void> {
-    try {
-      reqData.password = await this.encryption.Decrypt(reqData.password);
-      return await this.userRepository.CreateUser(reqData);
-    } catch (e) {
-      this.logger.WithoutField().error(`CreateUserService err : ${e}`);
-      throw new Error(errorsEnum.INTERNAL_SERVER);
+  async CreateUser(reqData: CreateUserDto) {
+    const prevUser = await this.userRepository.FindUserByEmail(reqData.email);
+    if (prevUser !== null && prevUser.email === reqData.email) {
+      throw GeneralException.GENERAL_BAD_REQUEST;
     }
+    reqData.password = await this.encryption.Decrypt(reqData.password);
+    return this.userRepository.CreateUser(reqData);
   }
 }
