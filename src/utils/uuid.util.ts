@@ -1,9 +1,5 @@
-import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
-@Injectable()
-export class UuidUtil {
-  GenerateUUID(): string {
-    return uuidv4();
-  }
-}
+export const GenerateUUID = () => {
+  return uuidv4();
+};

@@ -8,10 +8,9 @@ import { PkgModule } from '../pkg/pkg.module';
 import { UserModule } from '../module/user/user.module';
 import { XRequestIDMiddleware } from './middleware/xRequestID.middleware';
 import { LoggerMiddleware } from './middleware/logger.middleware';
-import { UtilsModule } from '../utils/utils.module';
 
 @Module({
-  imports: [PkgModule, UtilsModule, UserModule],
+  imports: [PkgModule, UserModule],
 })
 export class RestModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
