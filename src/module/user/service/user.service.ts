@@ -27,6 +27,7 @@ export class UserService {
       throw GeneralException.GENERAL_BAD_REQUEST;
     }
     reqData.password = await Encrypt(reqData.password);
-    return this.userRepository.CreateUser(reqData);
+    await this.userRepository.CreateUser(reqData);
+    return;
   }
 }
