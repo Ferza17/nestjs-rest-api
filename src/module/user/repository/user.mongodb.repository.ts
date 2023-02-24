@@ -24,7 +24,7 @@ export class UserMongodbRepository {
     } catch (e) {
       this.logger
         .WithField(reqData.RequestID)
-        .Error(`errCreateUserRepository err : ${e}`);
+        .Error('UserMongodbRepository', `errCreateUserRepository err : ${e}`);
       throw e;
     }
   }
@@ -35,7 +35,7 @@ export class UserMongodbRepository {
     } catch (e) {
       this.logger
         .WithField(reqData.RequestID)
-        .Error(`errFindUserByEmail err : ${e}`);
+        .Error('UserMongodbRepository', `errFindUserByEmail err : ${e}`);
       throw e;
     }
   }

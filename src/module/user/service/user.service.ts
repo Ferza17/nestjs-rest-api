@@ -23,7 +23,7 @@ export class UserService {
     if (prevUser !== null && prevUser.email === reqData.email) {
       this.logger
         .WithField(reqData.RequestID)
-        .Error(`errCreateUserService err : user already exist}`);
+        .Error('UserService', `errCreateUserService err : user already exist}`);
       throw GeneralException.GENERAL_BAD_REQUEST;
     }
     reqData.password = await Encrypt(reqData.password);

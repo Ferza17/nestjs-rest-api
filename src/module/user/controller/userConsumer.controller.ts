@@ -20,7 +20,10 @@ export class UserConsumerController {
     } catch (e) {
       this.logger
         .WithoutField()
-        .Error(`StreamingCreateUserJsonHandlerController err : ${e}`);
+        .Error(
+          'UserConsumerController',
+          `StreamingCreateUserJsonHandlerController err : ${e}`,
+        );
       throw new Error(e);
     }
   }

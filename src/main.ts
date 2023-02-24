@@ -35,9 +35,15 @@ class Server {
       const document = SwaggerModule.createDocument(server, swaggerConfig);
       SwaggerModule.setup('/api/docs', server, document);
       await server.listen(LoadConfig().port);
-      server.get(LoggerPkg).WithoutField().Info('Starting restServer');
+      server
+        .get(LoggerPkg)
+        .WithoutField()
+        .Info('restServer', 'Starting restServer');
     } catch (e) {
-      server.get(LoggerPkg).WithoutField().Error('error restServer');
+      server
+        .get(LoggerPkg)
+        .WithoutField()
+        .Error('restServer', 'error restServer');
     }
   }
 
@@ -62,9 +68,15 @@ class Server {
       server.enableShutdownHooks();
       server.useGlobalPipes(new ValidationPipe());
       await server.listen();
-      server.get(LoggerPkg).WithoutField().Info('Starting streamServer');
+      server
+        .get(LoggerPkg)
+        .WithoutField()
+        .Info('streamServer', 'Starting streamServer');
     } catch (e) {
-      server.get(LoggerPkg).WithoutField().Error('error streamServer');
+      server
+        .get(LoggerPkg)
+        .WithoutField()
+        .Error('streamServer', 'error streamServer');
     }
   }
 }
