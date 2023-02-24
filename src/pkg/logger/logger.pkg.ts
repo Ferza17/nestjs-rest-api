@@ -1,40 +1,34 @@
 import { Injectable } from '@nestjs/common';
 @Injectable()
 export class LoggerPkg {
-  private message: messageLogger;
+  private finalMessage: string;
 
-  WithField(requestID: string): messageLogger {
+  WithField(requestID: string): this {
     const now = new Date();
     const dateFormat =
       [now.getDate(), now.getMonth() + 1, now.getFullYear()].join('/') +
       ' ' +
       [now.getHours(), now.getMinutes(), now.getSeconds()].join(':');
 
-    this.message = new messageLogger();
-    this.message.finalMessage = `Time: ${dateFormat} - RequestID : ${requestID}`;
-    return this.message;
+    this.finalMessage = `Time: ${dateFormat} - RequestID : ${requestID}`;
+    return this;
   }
 
-  WithoutField(): messageLogger {
+  WithoutField(): this {
     const now = new Date();
     const dateFormat =
       [now.getDate(), now.getMonth() + 1, now.getFullYear()].join('/') +
       ' ' +
       [now.getHours(), now.getMinutes(), now.getSeconds()].join(':');
 
-    this.message = new messageLogger();
-    this.message.finalMessage = `Time: ${dateFormat}`;
-    return this.message;
+    this.finalMessage = `Time: ${dateFormat}`;
+    return this;
   }
-}
 
-class messageLogger {
-  public finalMessage: string;
-
-  info(msg: string) {
+  Info(msg: string) {
     console.info(`\x1b[32m[INFO]\t`, `\x1b[0m${this.finalMessage}`, msg);
   }
-  error(msg: string) {
+  Error(msg: string) {
     console.error(`\x1b[31m[ERROR]\t`, `\x1b[0m${this.finalMessage}`, msg);
   }
 }

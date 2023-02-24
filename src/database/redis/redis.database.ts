@@ -16,14 +16,14 @@ export class RedisDatabase implements OnApplicationShutdown {
       url: `redis://${host}:${port}`,
     });
     this.connection.connect().catch((e) => {
-      logger.WithoutField().error(`error connect to redis err : ${e}`);
+      logger.WithoutField().Error(`error connect to redis err : ${e}`);
     });
   }
 
   async onApplicationShutdown(signal?: string): Promise<any> {
     this.logger
       .WithoutField()
-      .info(`shutting down Redis Connection SIGNAL ${signal}`);
+      .Info(`shutting down Redis Connection SIGNAL ${signal}`);
     await this.connection.disconnect();
   }
 }

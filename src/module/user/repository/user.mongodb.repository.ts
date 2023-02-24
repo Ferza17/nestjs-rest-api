@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { LoggerPkg } from '../../../pkg/logger/logger.pkg';
 import { CreateUserDto } from '../dto/createUser.dto';
 import { IUser, UserCommand, UserQuery } from '../../../model/user.model';
+import { FindUserByEmailDto } from '../dto/findUserByEmail.dto';
 
 @Injectable()
 export class UserMongodbRepository {
@@ -21,16 +22,20 @@ export class UserMongodbRepository {
 
       await user.save();
     } catch (e) {
-      this.logger.WithoutField().error(`errCreateUserRepository err : ${e}`);
+      this.logger
+        .WithField(reqData.RequestID)
+        .Error(`errCreateUserRepository err : ${e}`);
       throw e;
     }
   }
 
-  async FindUserByEmail(email: string): Promise<IUser> {
+  async FindUserByEmail(reqData: FindUserByEmailDto): Promise<IUser> {
     try {
-      return await this.query.findOne({ email: email });
+      return await this.query.findOne({ email: reqData.Email });
     } catch (e) {
-      this.logger.WithoutField().error(`errFindUserByEmail err : ${e}`);
+      this.logger
+        .WithField(reqData.RequestID)
+        .Error(`errFindUserByEmail err : ${e}`);
       throw e;
     }
   }

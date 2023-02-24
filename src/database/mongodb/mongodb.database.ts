@@ -30,14 +30,14 @@ export class MongodbDatabase implements OnApplicationShutdown {
         this.connection = r;
       })
       .catch((err) => {
-        logger.WithoutField().error(`error connect to mongoDB err : ${err}`);
+        logger.WithoutField().Error(`error connect to mongoDB err : ${err}`);
       });
   }
 
   async onApplicationShutdown(signal?: string): Promise<any> {
     this.logger
       .WithoutField()
-      .info(`shutting down MongoDB Connection SIGNAL ${signal}`);
+      .Info(`shutting down MongoDB Connection SIGNAL ${signal}`);
     await this.connection.disconnect();
   }
 }
