@@ -25,6 +25,7 @@ class Server {
       server = await NestFactory.create<INestApplication>(AppModule, {});
       server.use(expressContext());
       server.useGlobalPipes(new ValidationPipe());
+      server.enableShutdownHooks();
       const swaggerConfig = new DocumentBuilder()
         .setTitle('Task Management API')
         .setDescription('The Task Management API Documentation')
@@ -58,6 +59,7 @@ class Server {
           },
         },
       );
+      server.enableShutdownHooks();
       server.useGlobalPipes(new ValidationPipe());
       await server.listen();
       server.get(LoggerPkg).WithoutField().info('Starting streamServer');

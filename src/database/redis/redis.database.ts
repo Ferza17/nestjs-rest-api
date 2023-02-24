@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { createClient, RedisClientType } from 'redis';
 import { LoggerPkg } from '../../pkg/logger/logger.pkg';
 
 @Injectable()
-export class RedisDatabase {
+export class RedisDatabase implements OnApplicationShutdown {
   private connection: RedisClientType;
   constructor(
     private logger: LoggerPkg,
@@ -18,5 +18,12 @@ export class RedisDatabase {
     this.connection.connect().catch((e) => {
       logger.WithoutField().error(`error connect to redis err : ${e}`);
     });
+  }
+
+  async onApplicationShutdown(signal?: string): Promise<any> {
+    this.logger
+      .WithoutField()
+      .info(`shutting down Redis Connection SIGNAL ${signal}`);
+    await this.connection.disconnect();
   }
 }

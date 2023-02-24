@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationShutdown } from '@nestjs/common';
 import mongoose, { Mongoose } from 'mongoose';
 import { LoggerPkg } from '../../pkg/logger/logger.pkg';
 
 @Injectable()
-export class MongodbDatabase {
+export class MongodbDatabase implements OnApplicationShutdown {
   private connection: Mongoose;
 
   constructor(
@@ -34,7 +34,10 @@ export class MongodbDatabase {
       });
   }
 
-  async Disconnect(): Promise<void> {
+  async onApplicationShutdown(signal?: string): Promise<any> {
+    this.logger
+      .WithoutField()
+      .info(`shutting down MongoDB Connection SIGNAL ${signal}`);
     await this.connection.disconnect();
   }
 }
