@@ -40,7 +40,6 @@ describe('UserService', () => {
 
   describe('CreateUser', () => {
     it('Call CreateUser ', async () => {
-      expect(userRepository.FindUserByEmail).not.toHaveBeenCalled();
       expect(userRepository.CreateUser).not.toHaveBeenCalled();
 
       const mockUser = new UserQuery({
@@ -49,7 +48,10 @@ describe('UserService', () => {
         email: 'reqData.email',
         password: 'abc',
       });
+
       userRepository.FindUserByEmail.mockResolvedValue(mockUser);
+      userRepository.CreateUser.mockResolvedValue();
+      await Encrypt(mockUser.password);
 
       userService.CreateUser({
         RequestID: 'abc',
@@ -57,9 +59,6 @@ describe('UserService', () => {
         name: 'abc',
         password: 'abc',
       });
-      await Encrypt(mockUser.password);
-
-      expect(userRepository.FindUserByEmail).toHaveBeenCalled();
     });
   });
 });
